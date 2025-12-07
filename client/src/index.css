@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Merriweather:wght@700&display=swap');
+
+/* Force class strategy for dark mode in Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Fonts */
+  --font-serif: Merriweather, serif;
+  --font-sans: Inter, sans-serif;
+
+  /* Colors */
+  --color-background: #FAFAFA;
+  --color-background-dark: #09090B;
+
+  --color-surface: #FFFFFF;
+  --color-surface-dark: #18181B;
+
+  --color-border: #E4E4E7;
+  --color-border-dark: #27272A;
+
+  --color-category-india: #F97316;
+  --color-category-global: #3B82F6;
+  --color-category-tech: #8B5CF6;
+  --color-category-sports: #10B981;
+  --color-category-finance: #0EA5E9;
+  --color-category-political: #EF4444;
+
+  /* Shadows */
+  --shadow-premium: 0 0 0 1px rgba(0, 0, 0, 0.03), 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-premium-dark: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+@utility mask-gradient {
+  mask-image: linear-gradient(to right, transparent, black 20px, black calc(100% - 20px), transparent);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-surface-dark transition-colors duration-300 antialiased font-sans;
+  }
+
+  /* Explicitly use the dark class selector if the variant isn't working as expected */
+  :root.dark body {
+    @apply bg-background-dark text-surface;
+  }
+}
