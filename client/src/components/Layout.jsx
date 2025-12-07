@@ -1,12 +1,13 @@
 
 import { useState, useEffect } from 'react';
-import { BsMoon, BsSun } from 'react-icons/bs';
+import { BsMoon, BsSun, BsBookmarkFill } from 'react-icons/bs';
 import { Link, useLocation, Outlet } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import WeatherWidget from './WeatherWidget';
 
 const Layout = () => {
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [darkMode, setDarkMode] = useState(() => {
         return localStorage.getItem('theme') === 'dark' ||
             (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -105,6 +106,7 @@ const Layout = () => {
 
                             {user ? (
                                 <div className="flex items-center gap-4">
+                                    {/* Desktop Text Link */}
                                     <Link
                                         to="/bookmarks"
                                         className={`hidden sm:block text-sm font-medium transition-colors px-4 py-2 rounded-full
@@ -115,8 +117,24 @@ const Layout = () => {
                                     >
                                         My Bookmarks
                                     </Link>
-                                    <div className="relative group">
-                                        <button className="flex items-center gap-2 focus:outline-none">
+
+                                    {/* Mobile Icon Link */}
+                                    <Link
+                                        to="/bookmarks"
+                                        className={`sm:hidden p-2 rounded-full transition-colors
+                                            ${location.pathname === '/bookmarks'
+                                                ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white'
+                                                : 'text-zinc-600 dark:text-zinc-400'
+                                            }`}
+                                    >
+                                        <BsBookmarkFill className="w-5 h-5" />
+                                    </Link>
+
+                                    <div className="relative">
+                                        <button
+                                            onClick={() => setIsProfileOpen(!isProfileOpen)}
+                                            className="flex items-center gap-2 focus:outline-none"
+                                        >
                                             {user.picture ? (
                                                 <img src={user.picture} alt={user.name} className="w-8 h-8 rounded-full border border-border dark:border-border-dark" />
                                             ) : (
@@ -125,16 +143,30 @@ const Layout = () => {
                                                 </div>
                                             )}
                                         </button>
-                                        <div className="absolute right-0 top-full pt-2 w-32 hidden group-hover:block">
-                                            <div className="bg-surface dark:bg-surface-dark rounded-xl shadow-premium dark:shadow-premium-dark border border-border dark:border-border-dark py-2">
-                                                <button
-                                                    onClick={logout}
-                                                    className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
-                                                >
-                                                    Logout
-                                                </button>
-                                            </div>
-                                        </div>
+
+                                        {/* Dropdown Menu */}
+                                        {isProfileOpen && (
+                                            <>
+                                                {/* Backdrop to close on click outside */}
+                                                <div
+                                                    className="fixed inset-0 z-10"
+                                                    onClick={() => setIsProfileOpen(false)}
+                                                />
+                                                <div className="absolute right-0 top-full mt-2 w-32 z-20">
+                                                    <div className="bg-surface dark:bg-surface-dark rounded-xl shadow-premium dark:shadow-premium-dark border border-border dark:border-border-dark py-2 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                                                        <button
+                                                            onClick={() => {
+                                                                logout();
+                                                                setIsProfileOpen(false);
+                                                            }}
+                                                            className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                                                        >
+                                                            Logout
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                             ) : (
