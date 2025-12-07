@@ -105,7 +105,6 @@ const GlobeLoader = ({ onComplete }) => {
                     transition={{ delay: 1.2 }}
                     className="mt-2 text-xs text-zinc-500 tracking-[0.3em] uppercase"
                 >
-                    Global Intelligence
                 </motion.p>
             </div>
         </motion.div>
